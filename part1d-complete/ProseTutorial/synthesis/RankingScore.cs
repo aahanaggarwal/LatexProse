@@ -16,7 +16,7 @@ namespace ProseTutorial
             return 0;
         }
 
-        [FeatureCalculator(nameof(Semantics.Substring))]
+        [FeatureCalculator(nameof(Semantics.Replace))]
         public static double Substring(double v, double start, double end)
         {
             return start * end;

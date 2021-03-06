@@ -1,0 +1,74 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/prakrit/workspace/LatexProse/part1d-complete/ProseTutorial/ProseTutorial.csproj": {}
+  },
+  "projects": {
+    "/Users/prakrit/workspace/LatexProse/part1d-complete/ProseTutorial/ProseTutorial.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/prakrit/workspace/LatexProse/part1d-complete/ProseTutorial/ProseTutorial.csproj",
+        "projectName": "ProseTutorial",
+        "projectPath": "/Users/prakrit/workspace/LatexProse/part1d-complete/ProseTutorial/ProseTutorial.csproj",
+        "packagesPath": "/Users/prakrit/.nuget/packages/",
+        "outputPath": "/Users/prakrit/workspace/LatexProse/part1d-complete/ProseTutorial/obj/",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "/Users/prakrit/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp2.1"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp2.1": {
+            "targetAlias": "netcoreapp2.1",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp2.1": {
+          "targetAlias": "netcoreapp2.1",
+          "dependencies": {
+            "Microsoft.NETCore.App": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.1.0, )",
+              "autoReferenced": true
+            },
+            "Microsoft.ProgramSynthesis": {
+              "target": "Package",
+              "version": "[7.27.0, )"
+            },
+            "Microsoft.ProgramSynthesis.Compiler": {
+              "target": "Package",
+              "version": "[7.27.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.200/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

@@ -13,7 +13,7 @@ namespace ProseTutorial
         {
         }
 
-        [WitnessFunction(nameof(Semantics.Substring), 1)]
+        [WitnessFunction(nameof(Semantics.Replace), 1)]
         public DisjunctiveExamplesSpec WitnessStartPosition(GrammarRule rule, ExampleSpec spec)
         {
             var result = new Dictionary<State, IEnumerable<object>>();
@@ -33,7 +33,7 @@ namespace ProseTutorial
             return new DisjunctiveExamplesSpec(result);
         }
 
-        [WitnessFunction(nameof(Semantics.Substring), 2, DependsOnParameters = new[] {1})]
+        [WitnessFunction(nameof(Semantics.Replace), 2, DependsOnParameters = new[] {1})]
         public ExampleSpec WitnessEndPosition(GrammarRule rule, ExampleSpec spec, ExampleSpec startSpec)
         {
             var result = new Dictionary<State, object>();

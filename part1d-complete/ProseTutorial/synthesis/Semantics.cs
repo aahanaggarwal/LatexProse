@@ -2,9 +2,9 @@
 {
     public static class Semantics
     {
-        public static string Substring(string v, int start, int end)
+        public static string Replace(string v, int start, int end)
         {
-            return v.Substring(start, end - start);
+            return v.Replace(v.Substring(start, end - start), "xxx");
         }
 
         public static int? AbsPos(string v, int k)
