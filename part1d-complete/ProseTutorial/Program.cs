@@ -17,7 +17,7 @@ namespace ProseTutorial
     {
         private static readonly Grammar Grammar = DSLCompiler.Compile(new CompilerOptions
         {
-            InputGrammarText = File.ReadAllText("synthesis/grammar/substring.grammar"),
+            InputGrammarText = File.ReadAllText("synthesis/grammar/latex.grammar"),
             References = CompilerReference.FromAssemblyFiles(typeof(Program).GetTypeInfo().Assembly)
         }).Value;
 
@@ -111,9 +111,10 @@ namespace ProseTutorial
                 Console.WriteLine("\"{0}\" -> \"{1}\"", example.Key.Bindings.First().Value, example.Value);
 
             var scoreFeature = new RankingScore(Grammar);
+
             ProgramSet topPrograms = _prose.LearnGrammarTopK(spec, scoreFeature, 4, null);
             if (topPrograms.IsEmpty) throw new Exception("No program was found for this specification.");
-
+            
             _topProgram = topPrograms.RealizedPrograms.First();
             Console.Out.WriteLine("Top 4 learned programs:");
             var counter = 1;

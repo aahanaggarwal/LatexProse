@@ -14,58 +14,86 @@ namespace ProseTutorial
         }
 
         [WitnessFunction(nameof(Semantics.Replace), 1)]
-        public DisjunctiveExamplesSpec WitnessStartPosition(GrammarRule rule, ExampleSpec spec)
+        public ExampleSpec WitnessStartPosition(GrammarRule rule, ExampleSpec spec)
         {
-            var result = new Dictionary<State, IEnumerable<object>>();
+            var result = new Dictionary<State, object>();
 
             foreach (KeyValuePair<State, object> example in spec.Examples)
             {
                 State inputState = example.Key;
                 var input = inputState[rule.Body[0]] as string;
                 var output = example.Value as string;
-                var occurrences = new List<int>();
 
-                for (int i = input.IndexOf(output); i >= 0; i = input.IndexOf(output, i + 1)) occurrences.Add(i);
+                // Method 1:
+                // 1. separate `input` and `output` into array of words, `in_words` and `out_words`
+                // 2. for each word in `in_words`, find the corresponding match in  `out_words`
+                // 3. every word will have a mapping, whether or not that word is a content or a symbol
 
-                if (occurrences.Count == 0) return null;
-                result[inputState] = occurrences.Cast<object>();
+
+                // Method 2:
+                // 1. separate `input` and `output` into array of words, `in_words` and `out_words`
+                // 2. remove words that are the same in the same index of both arrays
+                // 3. we will be left with direct mappings of only the relevant commands at the same index
+
+                // We choose Method 2.
+
+                // 1. separate input into words delimited by whitespace
+                List<string> in_words = input.Split(' ').ToList();
+                List<string> out_words = output.Split(' ').ToList();
+
+                // in_words and out_words should have the same length
+
+                // 2. remove words that are the same in the same index of both arrays
+                // going backwards ensures that we don't miss any elements
+                for (int i = in_words.Count - 1; i >= 0 ; i--) {
+                    if (in_words[i].Equals(out_words[i])) {
+                        in_words.RemoveAt(i);
+                        out_words.RemoveAt(i);
+                    }
+                }
+
+                result[inputState] = in_words[0];
+
+                // var occurrences = new List<int>();
+
+                // for (int i = input.IndexOf(output); i >= 0; i = input.IndexOf(output, i + 1)) occurrences.Add(i);
+
+                // if (occurrences.Count == 0) return null;
+                // result[inputState] = occurrences.Cast<object>();
             }
-            return new DisjunctiveExamplesSpec(result);
+            return new ExampleSpec(result);
         }
 
-        [WitnessFunction(nameof(Semantics.Replace), 2, DependsOnParameters = new[] {1})]
-        public ExampleSpec WitnessEndPosition(GrammarRule rule, ExampleSpec spec, ExampleSpec startSpec)
+        [WitnessFunction(nameof(Semantics.Replace), 2)]
+        public ExampleSpec WitnessEndPosition(GrammarRule rule, ExampleSpec spec)
         {
             var result = new Dictionary<State, object>();
             foreach (KeyValuePair<State, object> example in spec.Examples)
             {
                 State inputState = example.Key;
+                var input = inputState[rule.Body[0]] as string;
                 var output = example.Value as string;
-                var start = (int) startSpec.Examples[inputState];
-                result[inputState] = start + output.Length;
+
+                // We choose Method 2.
+
+                // 1. separate input into words delimited by whitespace
+                List<string> in_words = input.Split(' ').ToList();
+                List<string> out_words = output.Split(' ').ToList();
+
+                // in_words and out_words should have the same length
+
+                // 2. remove words that are the same in the same index of both arrays
+                // going backwards ensures that we don't miss any elements
+                for (int i = in_words.Count - 1; i >= 0 ; i--) {
+                    if (in_words[i].Equals(out_words[i])) {
+                        in_words.RemoveAt(i);
+                        out_words.RemoveAt(i);
+                    }
+                }
+
+                result[inputState] = out_words[0];
             }
             return new ExampleSpec(result);
-        }
-
-        [WitnessFunction(nameof(Semantics.AbsPos), 1)]
-        public DisjunctiveExamplesSpec WitnessK(GrammarRule rule, DisjunctiveExamplesSpec spec)
-        {
-            var kExamples = new Dictionary<State, IEnumerable<object>>();
-            foreach (KeyValuePair<State, IEnumerable<object>> example in spec.DisjunctiveExamples)
-            {
-                State inputState = example.Key;
-                var v = inputState[rule.Body[0]] as string;
-
-                var positions = new List<int>();
-                foreach (int pos in example.Value)
-                {
-                    positions.Add(pos + 1);
-                    positions.Add(pos - v.Length - 1);
-                }
-                if (positions.Count == 0) return null;
-                kExamples[inputState] = positions.Cast<object>();
-            }
-            return DisjunctiveExamplesSpec.From(kExamples);
         }
     }
 }

@@ -19,19 +19,21 @@ namespace ProseTutorial
         [FeatureCalculator(nameof(Semantics.Replace))]
         public static double Substring(double v, double start, double end)
         {
-            return start * end;
+            // return start * end;
+            return 0;
         }
 
-        [FeatureCalculator(nameof(Semantics.AbsPos))]
-        public static double AbsPos(double v, double k)
-        {
-            return k;
-        }
+        // [FeatureCalculator(nameof(Semantics.AbsPos))]
+        // public static double AbsPos(double v, double k)
+        // {
+        //     return k;
+        // }
 
-        [FeatureCalculator("k", Method = CalculationMethod.FromLiteral)]
-        public static double K(int k)
+        [FeatureCalculator("symbol", Method = CalculationMethod.FromLiteral)]
+        public static double K(string symbol)
         {
-            return 1.0 / Math.Abs(k);
+            // return 1.0 / symbol.Length;
+            return 0;
         }
     }
 }

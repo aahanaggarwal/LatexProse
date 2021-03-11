@@ -1,15 +1,12 @@
-﻿namespace ProseTutorial
+﻿using System;
+
+namespace ProseTutorial
 {
     public static class Semantics
     {
-        public static string Replace(string v, int start, int end)
+        public static string Replace(string v, string in_word, string out_word)
         {
-            return v.Replace(v.Substring(start, end - start), "xxx");
-        }
-
-        public static int? AbsPos(string v, int k)
-        {
-            return k > 0 ? k - 1 : v.Length + k + 1;
+            return v.Replace(in_word, out_word);
         }
     }
 }

@@ -1,14 +1,12 @@
 ﻿using semantics ProseTutorial.Semantics;
 using learners ProseTutorial.WitnessFunctions;
 
-language Substring;
+language LaTeX;
 
 @complete feature double Score = ProseTutorial.RankingScore;
 
 @input string v;
 
-@start string program := Replace(v, pos, pos);
+@start string program := Replace(v, symbol, symbol);
 
-int pos := AbsPos(v, k);
-
-int k; 
+string symbol;
