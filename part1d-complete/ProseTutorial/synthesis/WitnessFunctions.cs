@@ -52,7 +52,7 @@ namespace ProseTutorial
                     }
                 }
 
-                result[inputState] = in_words[0];
+                result[inputState] = in_words;
 
                 // var occurrences = new List<int>();
 
@@ -91,7 +91,7 @@ namespace ProseTutorial
                     }
                 }
 
-                result[inputState] = out_words[0];
+                result[inputState] = out_words;
             }
             return new ExampleSpec(result);
         }
