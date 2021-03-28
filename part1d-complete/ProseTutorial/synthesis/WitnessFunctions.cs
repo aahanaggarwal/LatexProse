@@ -14,7 +14,7 @@ namespace ProseTutorial
         }
 
         [WitnessFunction(nameof(Semantics.Replace), 1)]
-        public ExampleSpec WitnessStartPosition(GrammarRule rule, ExampleSpec spec)
+        public DisjunctiveExampleSpec WitnessStartPosition(GrammarRule rule, ExampleSpec spec)
         {
             var result = new Dictionary<State, object>();
 
@@ -52,14 +52,16 @@ namespace ProseTutorial
                     }
                 }
 
-                result[inputState] = in_words[0];
+                // result[inputState] = in_words[0];
 
-                // var occurrences = new List<int>();
+                var occurrences = new List<string>();
 
-                // for (int i = input.IndexOf(output); i >= 0; i = input.IndexOf(output, i + 1)) occurrences.Add(i);
+                for (int i = 0; i < in_words.Count; i++) {
+                    occurrences.Add(out_words[i]);
+                }
 
-                // if (occurrences.Count == 0) return null;
-                // result[inputState] = occurrences.Cast<object>();
+                if (occurrences.Count == 0) return null;
+                result[inputState] = occurrences.Cast<object>();
             }
             return new ExampleSpec(result);
         }
