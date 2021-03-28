@@ -57,17 +57,17 @@ namespace ProseTutorial
                 var occurrences = new List<string>();
 
                 for (int i = 0; i < in_words.Count; i++) {
-                    occurrences.Add(out_words[i]);
+                    occurrences.Add(in_words[i]);
                 }
 
                 if (occurrences.Count == 0) return null;
                 result[inputState] = occurrences.Cast<object>();
             }
-            return new ExampleSpec(result);
+            return new DisjunctiveExampleSpec(result);
         }
 
         [WitnessFunction(nameof(Semantics.Replace), 2)]
-        public ExampleSpec WitnessEndPosition(GrammarRule rule, ExampleSpec spec)
+        public DisjunctiveExampleSpec WitnessEndPosition(GrammarRule rule, ExampleSpec spec)
         {
             var result = new Dictionary<State, object>();
             foreach (KeyValuePair<State, object> example in spec.Examples)
@@ -93,9 +93,18 @@ namespace ProseTutorial
                     }
                 }
 
-                result[inputState] = out_words[0];
+                // result[inputState] = out_words[0];
+
+                var occurrences = new List<string>();
+
+                for (int i = 0; i < in_words.Count; i++) {
+                    occurrences.Add(out_words[i]);
+                }
+
+                if (occurrences.Count == 0) return null;
+                result[inputState] = occurrences.Cast<object>();
             }
-            return new ExampleSpec(result);
+            return new DisjunctiveExampleSpec(result);
         }
     }
 }
