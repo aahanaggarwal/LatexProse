@@ -1,5 +1,6 @@
 ﻿using semantics ProseTutorial.Semantics;
 using learners ProseTutorial.WitnessFunctions;
+using System.Collections.Generic;
 
 language LaTeX;
 
@@ -7,6 +8,6 @@ language LaTeX;
 
 @input string v;
 
-@start string program := Replace(v, symbol, symbol);
+@start string program := Replace(v, symbols, symbols);
 
-string symbol;
+List<string> symbols;
