@@ -4,6 +4,7 @@ using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.Learning;
 using Microsoft.ProgramSynthesis.Rules;
 using Microsoft.ProgramSynthesis.Specifications;
+using System.Text.RegularExpressions;
 
 namespace ProseTutorial
 {
@@ -28,6 +29,59 @@ namespace ProseTutorial
                 // 1. separate `input` and `output` into array of words, `in_words` and `out_words`
                 // 2. for each word in `in_words`, find the corresponding match in  `out_words`
                 // 3. every word will have a mapping, whether or not that word is a content or a symbol
+
+                // delimiters, matches (), {}, [], and whitespace
+                string delim = @"[(){}\[\]\s]";
+
+                // separate input into symbols, keeping delimiters
+                string[] in_symbols = Regex.Split(input, delim);
+                string[] out_symbols = Regex.Split(output, delim);
+
+                // declare and initialize arrays to false
+                bool[] is_matched_in = Enumerable.Repeat(false, in_symbols.Length).ToArray();
+                bool[] is_matched_out = Enumerable.Repeat(false, out_symbols.Length).ToArray();
+                bool[] is_delim_out = Enumerable.Repeat(false, out_symbols.Length).ToArray();
+
+                int[] index_change = new int[out_symbols.Length];
+
+                // compute index change
+                for (int i = 0; i < out_symbols.Length; i++) {
+
+                    // skip brackets
+                    if (Regex.IsMatch(out_symbols[i], delim)) {
+                        is_delim_out[i] = true;
+                        continue;
+                    }
+
+                    for (int j = 0; j < in_symbols.Length; j++) {
+                        // word matched
+                         if (!is_matched_in[j] && out_symbols[i].Equals(in_symbols[j])) {
+                             index_change[i] = j - i;
+                             is_matched_in[j] = true;
+                             is_matched_out[i] = true;
+                             break;
+                         }
+                    }
+                }
+
+                // TODO: identify all unmatched symbols, like in Substring
+                // Right now, match all unmatched out_symbol with the nearest unmatched in_symbol
+                for (int i = 0; i < is_matched_out.Length; i++) {
+                    if (!is_delim_out[i] && !is_matched_out[i]) {
+                        for (int j = 0; j < is_matched_in.Length; j++) {
+                            if (!is_matched_in[j]) {
+                                index_change[i] = j - i;
+                                is_matched_in[j] = true;
+                                is_matched_out[i] = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                result[inputState] = in_symbols;
+
+
 
 
                 // Method 2:

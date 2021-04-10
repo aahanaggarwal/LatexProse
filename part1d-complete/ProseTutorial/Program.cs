@@ -77,7 +77,7 @@ namespace ProseTutorial
 
         private static void LearnFromNewExample()
         {
-            Console.Out.Write("Provide a new input-output example (e.g., \"(Sumit Gulwani)\",\"Gulwani\"): ");
+            Console.Out.Write("Provide a new input-output example: ");
             try
             {
                 string input = Console.ReadLine();
