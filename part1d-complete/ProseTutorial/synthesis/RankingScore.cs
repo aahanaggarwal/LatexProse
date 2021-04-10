@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.AST;
 using Microsoft.ProgramSynthesis.Features;
@@ -29,8 +29,8 @@ namespace ProseTutorial
         //     return k;
         // }
 
-        [FeatureCalculator("symbol", Method = CalculationMethod.FromLiteral)]
-        public static double K(string symbol)
+        [FeatureCalculator("symbols", Method = CalculationMethod.FromLiteral)]
+        public static double K(List<string> symbols)
         {
             // return 1.0 / symbol.Length;
             return 0;
