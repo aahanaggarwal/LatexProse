@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.AST;
 using Microsoft.ProgramSynthesis.Features;
@@ -35,19 +36,19 @@ namespace ProseTutorial
         }
 
         [FeatureCalculator("range", Method = CalculationMethod.FromLiteral)]
-        public static double RankingRange(List<(string, (int, int))> range)
+        public static double RankingRange(List<Tuple<string, Tuple<int, int>>> range)
         {
             return 0;
         }
 
         [FeatureCalculator("templates", Method = CalculationMethod.FromLiteral)]
-        public static double RankingTemplates(List<(string, string[])> templates)
+        public static double RankingTemplates(List<Tuple<string, string[]>> templates)
         {
             return 0;
         }
 
         [FeatureCalculator("mappings", Method = CalculationMethod.FromLiteral)]
-        public static double RankingMappings(List<(string, int[], bool[])> mappings)
+        public static double RankingMappings(List<Tuple<string, int[], bool[]>> mappings)
         {
             return 0;
         }

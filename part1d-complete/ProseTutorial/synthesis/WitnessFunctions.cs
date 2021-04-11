@@ -15,6 +15,7 @@ namespace ProseTutorial
         {
         }
 
+        // map all placeholders to the correct symbol index in the token
         private (string[], string[], bool[], bool[], bool[], int[]) 
         computePartialMapping(string input, string output) {
             
@@ -62,6 +63,39 @@ namespace ProseTutorial
                 is_replacement_delim, 
                 placeholder_index
             );
+        }
+
+
+        /* Replace */
+
+        [WitnessFunction(nameof(Semantics.Replace), 1)]
+        public ExampleSpec WitnessReplaceTokens(GrammarRule rule, ExampleSpec spec)
+        {
+            var result = new Dictionary<State, object>();
+            foreach (KeyValuePair<State, object> example in spec.Examples)
+            {
+                State inputState = example.Key;
+                var input = inputState[rule.Body[0]] as string;
+                var output = example.Value as string;
+
+                result[inputState] = output;
+            }
+            return new ExampleSpec(result);
+        }
+
+        [WitnessFunction(nameof(Semantics.Replace), 2)]
+        public ExampleSpec WitnessReplaceReplacements(GrammarRule rule, ExampleSpec spec)
+        {
+            var result = new Dictionary<State, object>();
+            foreach (KeyValuePair<State, object> example in spec.Examples)
+            {
+                State inputState = example.Key;
+                var input = inputState[rule.Body[0]] as string;
+                var output = example.Value as string;
+
+                result[inputState] = output;
+            }
+            return new ExampleSpec(result);
         }
 
 
