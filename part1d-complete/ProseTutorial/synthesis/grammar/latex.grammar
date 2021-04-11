@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using semantics ProseTutorial.Semantics;
 using learners ProseTutorial.WitnessFunctions;
-using System.Collections.Generic;
 
-language LaTeX;
+language LaTeXGen;
 
 @complete feature double Score = ProseTutorial.RankingScore;
 
