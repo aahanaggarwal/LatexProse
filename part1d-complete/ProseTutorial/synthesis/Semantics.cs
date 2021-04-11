@@ -7,7 +7,7 @@ namespace ProseTutorial
 {
     public static class Semantics
     {
-        public static string Replace(string v, List<(string, string)> words, string[] replacements)
+        public static string Replace(string v, List<Tuple<string, string>> words, List<string> replacements)
         {
             string modified = v;
 
@@ -18,7 +18,7 @@ namespace ProseTutorial
             return modified;
         }
 
-        public static List<(string, string)> Split(string v, List<(string, (int, int))> range_list)
+        public static List<Tuple<string, string>> Split(string v, List<Tuple<string, Tuple<int, int>>> range_list)
         {
             // delimiters, matches (), {}, [], and whitespace
             string delim = @"[(){}\[\]\s]";
@@ -30,20 +30,20 @@ namespace ProseTutorial
             List<string> input = new List<string>(Regex.Split(v, delim));
 
             // this method's return value
-            List<(string, string)> substrings = new List<(string, string)>();
+            List<Tuple<string, string>> substrings = new List<Tuple<string, string>>();
 
             // loop through the input and find the substrings to replace
             for (int i = 0; i < input.Count; i++) {
                 if (symbol_list.Contains(input[i])) {
                     int index = symbol_list.IndexOf(input[i]);
-                    (int, int) local_range = range_list[index].Item2;
+                    Tuple<int, int> local_range = range_list[index].Item2;
 
                     int start = Math.Max(i + local_range.Item1, 0);
                     int end = Math.Min(i + local_range.Item2, input.Count);
 
                     List<string> sublist = input.GetRange(start, end);
                     string substring = String.Join("", sublist);
-                    substrings.Add((input[i], substring));
+                    substrings.Add(new Tuple<string, string>(input[i], substring));
                 }
             }
 
@@ -51,9 +51,9 @@ namespace ProseTutorial
         }
 
         public static List<string> Map(
-            List<(string, string)> words, 
-            List<(string, string[])> formats, 
-            List<(string, int[], bool[])> mappings
+            List<Tuple<string, string>> words, 
+            List<Tuple<string, string[]>> formats, 
+            List<Tuple<string, int[], bool[]>> mappings
         ) {
 
             string delim = @"[(){}\[\]\s]";

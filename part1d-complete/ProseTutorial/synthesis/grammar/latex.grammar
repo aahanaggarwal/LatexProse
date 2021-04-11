@@ -7,10 +7,10 @@ language LaTeXGen;
 @complete feature double Score = ProseTutorial.RankingScore;
 
 @start string program := Replace(v, words, replacements);
-List<(string, string)> words := Split(v, range);
+List<Tuple<string, string>> words := Split(v, range);
 List<string> replacements := Map(words, formats, mappings);
 
 @input string v;
-List<(string, (int, int))> range;
-List<(string, string[])> formats;
-List<(string, int[], bool[])> mappings;
+List<Tuple<string, Tuple<int, int>>> range;
+List<Tuple<string, string[]>> formats;
+List<Tuple<string, int[], bool[]>> mappings;
