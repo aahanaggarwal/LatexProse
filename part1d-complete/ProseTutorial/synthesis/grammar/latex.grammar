@@ -9,9 +9,9 @@ language LaTeXGen;
 
 @start string program := Replace(v, words, replacements);
 List<Tuple<string, string>> words := Split(v, range);
-List<string> replacements := Map(words, formats, mappings);
+List<string> replacements := Map(words, templates, mappings);
 
 @input string v;
 List<Tuple<string, Tuple<int, int>>> range;
-List<Tuple<string, string[]>> formats;
+List<Tuple<string, string[]>> templates;
 List<Tuple<string, int[], bool[]>> mappings;

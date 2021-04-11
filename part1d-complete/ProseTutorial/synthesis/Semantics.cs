@@ -52,7 +52,7 @@ namespace ProseTutorial
 
         public static List<string> Map(
             List<Tuple<string, string>> words, 
-            List<Tuple<string, string[]>> formats, 
+            List<Tuple<string, string[]>> templates, 
             List<Tuple<string, int[], bool[]>> mappings
         ) {
 
@@ -63,20 +63,20 @@ namespace ProseTutorial
                 string symbol = words[i].Item1;
                 string word = words[i].Item2;
 
-                int format_index = formats.FindIndex(elem => elem.Item1 == symbol);
-                string[] format = formats[format_index].Item2;
-                int[] placeholder_index = mappings[format_index].Item2;
-                bool[] is_matched_out = mappings[format_index].Item3;
+                int template_index = templates.FindIndex(elem => elem.Item1 == symbol);
+                string[] template = templates[template_index].Item2;
+                int[] placeholder_index = mappings[template_index].Item2;
+                bool[] is_matched_out = mappings[template_index].Item3;
 
                 List<string> input = new List<string>(Regex.Split(word, delim));
 
                 // map user input to correct position
-                for (int j = 0; j < format.Length; j++) {
+                for (int j = 0; j < template.Length; j++) {
                     if (is_matched_out[j]) {
-                        format[j] = input[placeholder_index[j]];
+                        template[j] = input[placeholder_index[j]];
                     }
                 }
-                replacements.Add(String.Join("", format));
+                replacements.Add(String.Join("", template));
             }
 
             return replacements;

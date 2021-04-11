@@ -119,7 +119,7 @@ namespace ProseTutorial
         /* Map */
 
         [WitnessFunction(nameof(Semantics.Map), 1)]
-        public ExampleSpec WitnessMapFormats(GrammarRule rule, ExampleSpec spec)
+        public ExampleSpec WitnessMapTemplates(GrammarRule rule, ExampleSpec spec)
         {
             var result = new Dictionary<State, object>();
             foreach (KeyValuePair<State, object> example in spec.Examples)
@@ -137,7 +137,7 @@ namespace ProseTutorial
                     int[] placeholder_index
                 ) = computePartialMapping(input, output);
 
-                List<Tuple<string, string[]>> formats = new List<Tuple<string, string[]>>();
+                List<Tuple<string, string[]>> templates = new List<Tuple<string, string[]>>();
 
                 // TODO: identify all unmatched symbols, like in Substring
                 // Right now, match all unmatched `replacement` with the nearest unmatched `word`
@@ -147,14 +147,14 @@ namespace ProseTutorial
                             if (!is_word_matched[j]) {
                                 string symbol = word[j];
                                 is_word_matched[j] = true;
-                                formats.Add(new Tuple<string, string[]>(symbol, replacement));
+                                templates.Add(new Tuple<string, string[]>(symbol, replacement));
                                 break;
                             }
                         }
                     }
                 }
 
-                result[inputState] = formats;
+                result[inputState] = templates;
             }
             return new ExampleSpec(result);
         }

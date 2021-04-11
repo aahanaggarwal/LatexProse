@@ -29,7 +29,7 @@ namespace ProseTutorial
         }
 
         [FeatureCalculator(nameof(Semantics.Map))]
-        public static double RankingMap(double words, double formats, double mappings)
+        public static double RankingMap(double words, double templates, double mappings)
         {
             return 0;
         }
@@ -40,8 +40,8 @@ namespace ProseTutorial
             return 0;
         }
 
-        [FeatureCalculator("formats", Method = CalculationMethod.FromLiteral)]
-        public static double RankingFormats(List<(string, string[])> formats)
+        [FeatureCalculator("templates", Method = CalculationMethod.FromLiteral)]
+        public static double RankingTemplates(List<(string, string[])> templates)
         {
             return 0;
         }
