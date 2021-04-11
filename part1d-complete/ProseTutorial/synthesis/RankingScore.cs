@@ -17,7 +17,7 @@ namespace ProseTutorial
         }
 
         [FeatureCalculator(nameof(Semantics.Replace))]
-        public static double RankingReplace(double v, double words, double replacements)
+        public static double RankingReplace(double v, double tokens, double replacements)
         {
             return 0;
         }
@@ -29,7 +29,7 @@ namespace ProseTutorial
         }
 
         [FeatureCalculator(nameof(Semantics.Map))]
-        public static double RankingMap(double words, double templates, double mappings)
+        public static double RankingMap(double tokens, double templates, double mappings)
         {
             return 0;
         }

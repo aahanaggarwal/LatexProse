@@ -7,12 +7,12 @@ namespace ProseTutorial
 {
     public static class Semantics
     {
-        public static string Replace(string v, List<Tuple<string, string>> words, List<string> replacements)
+        public static string Replace(string v, List<Tuple<string, string>> tokens, List<string> replacements)
         {
             string modified = v;
 
-            for (int i = 0; i < words.Count; i++) {
-                modified = modified.Replace(words[i].Item2, replacements[i]);
+            for (int i = 0; i < tokens.Count; i++) {
+                modified = modified.Replace(tokens[i].Item2, replacements[i]);
             }
 
             return modified;
@@ -51,7 +51,7 @@ namespace ProseTutorial
         }
 
         public static List<string> Map(
-            List<Tuple<string, string>> words, 
+            List<Tuple<string, string>> tokens, 
             List<Tuple<string, string[]>> templates, 
             List<Tuple<string, int[], bool[]>> mappings
         ) {
@@ -59,16 +59,16 @@ namespace ProseTutorial
             string delim = @"[(){}\[\]\s]";
             List<string> replacements = new List<string>();
 
-            for (int i = 0; i < words.Count; i++) {
-                string symbol = words[i].Item1;
-                string word = words[i].Item2;
+            for (int i = 0; i < tokens.Count; i++) {
+                string symbol = tokens[i].Item1;
+                string token = tokens[i].Item2;
 
                 int template_index = templates.FindIndex(elem => elem.Item1 == symbol);
                 string[] template = templates[template_index].Item2;
                 int[] placeholder_index = mappings[template_index].Item2;
                 bool[] is_matched_out = mappings[template_index].Item3;
 
-                List<string> input = new List<string>(Regex.Split(word, delim));
+                List<string> input = new List<string>(Regex.Split(token, delim));
 
                 // map user input to correct position
                 for (int j = 0; j < template.Length; j++) {
