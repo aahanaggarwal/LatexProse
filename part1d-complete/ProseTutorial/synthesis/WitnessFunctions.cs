@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Microsoft.ProgramSynthesis;
@@ -87,7 +88,7 @@ namespace ProseTutorial
                     int[] index_change
                 ) = computePartialMapping(input, output);
 
-                List<(string, (int, int))> range_list = new List<(string, (int, int))>();
+                List<Tuple<string, Tuple<int, int>>> range_list = new List<Tuple<string, Tuple<int, int>>>();
 
                 // TODO: identify all unmatched symbols, like in Substring
                 // Right now, match all unmatched `replacement` with the nearest unmatched `word`
@@ -100,7 +101,8 @@ namespace ProseTutorial
                                 int range_end = replacement.Length - j;
                                 is_word_matched[j] = true;
 
-                                range_list.Add((symbol, (range_start, range_end)));
+                                Tuple<int, int> range = new Tuple<int, int>(range_start, range_end);
+                                range_list.Add(new Tuple<string, Tuple<int, int>>(symbol, range));
                                 break;
                             }
                         }
@@ -135,7 +137,7 @@ namespace ProseTutorial
                     int[] index_change
                 ) = computePartialMapping(input, output);
 
-                List<(string, string[])> formats = new List<(string, string[])>();
+                List<Tuple<string, string[]>> formats = new List<Tuple<string, string[]>>();
 
                 // TODO: identify all unmatched symbols, like in Substring
                 // Right now, match all unmatched `replacement` with the nearest unmatched `word`
@@ -145,7 +147,7 @@ namespace ProseTutorial
                             if (!is_word_matched[j]) {
                                 string symbol = word[j];
                                 is_word_matched[j] = true;
-                                formats.Add((symbol, replacement));
+                                formats.Add(new Tuple<string, string[]>(symbol, replacement));
                                 break;
                             }
                         }
@@ -177,7 +179,7 @@ namespace ProseTutorial
                     int[] index_change
                 ) = computePartialMapping(input, output);
 
-                List<(string, int[], bool[])> mappings = new List<(string, int[], bool[])>();
+                List<Tuple<string, int[], bool[]>> mappings = new List<Tuple<string, int[], bool[]>>();
 
                 // TODO: identify all unmatched symbols, like in Substring
                 // Right now, match all unmatched `replacement` with the nearest unmatched `word`
@@ -195,7 +197,7 @@ namespace ProseTutorial
 
                                 // is_replacement_matched = true;
 
-                                mappings.Add((symbol, index_change, is_replacement_matched));
+                                mappings.Add(new Tuple<string, int[], bool[]>(symbol, index_change, is_replacement_matched));
                                 break;
                             }
                         }
