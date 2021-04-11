@@ -30,7 +30,7 @@ namespace ProseTutorial
             bool[] is_replacement_matched = Enumerable.Repeat(false, replacement.Length).ToArray();
             bool[] is_replacement_delim = Enumerable.Repeat(false, replacement.Length).ToArray();
 
-            int[] index_change = new int[replacement.Length];
+            int[] placeholder_index = new int[replacement.Length];
 
             // compute index change at every symbol in replacement
             for (int i = 0; i < replacement.Length; i++) {
@@ -48,7 +48,7 @@ namespace ProseTutorial
                 // relative to the index in `replacement`
                 for (int j = 0; j < word.Length; j++) {
                     if (!is_word_matched[j] && replacement[i].Equals(word[j])) {
-                        index_change[i] = j - i;
+                        placeholder_index[i] = j;
                         is_word_matched[j] = true;
                         is_replacement_matched[i] = true;
                         break;
@@ -62,7 +62,7 @@ namespace ProseTutorial
                 is_word_matched, 
                 is_replacement_matched, 
                 is_replacement_delim, 
-                index_change
+                placeholder_index
             );
         }
 
@@ -85,7 +85,7 @@ namespace ProseTutorial
                     bool[] is_word_matched, 
                     bool[] is_replacement_matched, 
                     bool[] is_replacement_delim, 
-                    int[] index_change
+                    int[] placeholder_index
                 ) = computePartialMapping(input, output);
 
                 List<Tuple<string, Tuple<int, int>>> range_list = new List<Tuple<string, Tuple<int, int>>>();
@@ -134,7 +134,7 @@ namespace ProseTutorial
                     bool[] is_word_matched, 
                     bool[] is_replacement_matched, 
                     bool[] is_replacement_delim, 
-                    int[] index_change
+                    int[] placeholder_index
                 ) = computePartialMapping(input, output);
 
                 List<Tuple<string, string[]>> formats = new List<Tuple<string, string[]>>();
@@ -176,7 +176,7 @@ namespace ProseTutorial
                     bool[] is_word_matched, 
                     bool[] is_replacement_matched, 
                     bool[] is_replacement_delim, 
-                    int[] index_change
+                    int[] placeholder_index
                 ) = computePartialMapping(input, output);
 
                 List<Tuple<string, int[], bool[]>> mappings = new List<Tuple<string, int[], bool[]>>();
@@ -188,7 +188,7 @@ namespace ProseTutorial
                         for (int j = 0; j < is_word_matched.Length; j++) {
                             if (!is_word_matched[j]) {
                                 string symbol = word[j];
-                                index_change[i] = j - i;
+                                placeholder_index[i] = j;
                                 is_word_matched[j] = true;
 
                                 // deliberately skip `is_replacement_matched = true`
@@ -197,7 +197,7 @@ namespace ProseTutorial
 
                                 // is_replacement_matched = true;
 
-                                mappings.Add(new Tuple<string, int[], bool[]>(symbol, index_change, is_replacement_matched));
+                                mappings.Add(new Tuple<string, int[], bool[]>(symbol, placeholder_index, is_replacement_matched));
                                 break;
                             }
                         }

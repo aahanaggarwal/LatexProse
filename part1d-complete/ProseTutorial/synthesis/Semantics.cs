@@ -65,7 +65,7 @@ namespace ProseTutorial
 
                 int format_index = formats.FindIndex(elem => elem.Item1 == symbol);
                 string[] format = formats[format_index].Item2;
-                int[] index_change = mappings[format_index].Item2;
+                int[] placeholder_index = mappings[format_index].Item2;
                 bool[] is_matched_out = mappings[format_index].Item3;
 
                 List<string> input = new List<string>(Regex.Split(word, delim));
@@ -73,7 +73,7 @@ namespace ProseTutorial
                 // map user input to correct position
                 for (int j = 0; j < format.Length; j++) {
                     if (is_matched_out[j]) {
-                        format[j] = input[j + index_change[j]];
+                        format[j] = input[placeholder_index[j]];
                     }
                 }
                 replacements.Add(String.Join("", format));
