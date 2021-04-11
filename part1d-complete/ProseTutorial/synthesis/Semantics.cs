@@ -18,7 +18,7 @@ namespace ProseTutorial
             return modified;
         }
 
-        public static List<string> Split(string v, List<(string, (int, int))> range_list)
+        public static List<(string, string)> Split(string v, List<(string, (int, int))> range_list)
         {
             // delimiters, matches (), {}, [], and whitespace
             string delim = @"[(){}\[\]\s]";
@@ -30,7 +30,7 @@ namespace ProseTutorial
             List<string> input = new List<string>(Regex.Split(v, delim));
 
             // this method's return value
-            List<string> substrings = new List<string>();
+            List<(string, string)> substrings = new List<(string, string)>();
 
             // loop through the input and find the substrings to replace
             for (int i = 0; i < input.Count; i++) {
@@ -43,7 +43,7 @@ namespace ProseTutorial
 
                     List<string> sublist = input.GetRange(start, end);
                     string substring = String.Join("", sublist);
-                    substrings.Add(substring);
+                    substrings.Add((input[i], substring));
                 }
             }
 
