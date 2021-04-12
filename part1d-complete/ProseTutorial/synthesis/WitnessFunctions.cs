@@ -223,11 +223,11 @@ namespace ProseTutorial
                                 placeholder_index[i] = j;
                                 is_token_matched[j] = true;
 
-                                // deliberately skip `is_replacement_matched = true`
+                                // deliberately skip `is_replacement_matched[j] = true`
                                 // otherwise the LaTeX command will be replaced by user symbol
                                 // e.g. "\frac" will be replaced by "/" 
 
-                                // is_replacement_matched = true;
+                                // is_replacement_matched[j] = true;
 
                                 mappings.Add(new Tuple<string, int[], bool[]>(symbol, placeholder_index, is_replacement_matched));
                                 break;
