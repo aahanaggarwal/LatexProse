@@ -130,10 +130,10 @@ namespace ProseTutorial
                             if (!is_token_matched[j]) {
                                 string symbol = token[j];
                                 int range_start = -1;
-                                int range_end = +2;
+                                int range_count = +2;
                                 is_token_matched[j] = true;
 
-                                Tuple<int, int> range = new Tuple<int, int>(range_start, range_end);
+                                Tuple<int, int> range = new Tuple<int, int>(range_start, range_count);
                                 range_list.Add(new Tuple<string, Tuple<int, int>>(symbol, range));
                                 break;
                             }

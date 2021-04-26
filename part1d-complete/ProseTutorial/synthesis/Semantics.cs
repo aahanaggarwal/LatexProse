@@ -39,9 +39,9 @@ namespace ProseTutorial
                     Tuple<int, int> local_range = range_list[index].Item2;
 
                     int start = Math.Max(i + local_range.Item1, 0);
-                    int end = Math.Min(i + local_range.Item2, input.Count);
+                    int count = Math.Min(local_range.Item2, input.Count - i) + 1;
 
-                    List<string> sublist = input.GetRange(start, end);
+                    List<string> sublist = input.GetRange(start, count);
                     string substring = String.Join("", sublist);
                     substrings.Add(new Tuple<string, string>(input[i], substring));
                 }
