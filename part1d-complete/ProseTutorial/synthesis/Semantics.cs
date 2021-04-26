@@ -20,8 +20,8 @@ namespace ProseTutorial
 
         public static List<Tuple<string, string>> Split(string v, List<Tuple<string, Tuple<int, int>>> range_list)
         {
-            // delimiters, matches (), {}, [], and whitespace
-            string delim = @"[(){}\[\]\s]";
+            // delimiters, matches all non-words and numbers
+            string delim = @"([^\w\\])|(_)";
 
             // list of symbols to replace
             List<string> symbol_list = new List<string>(range_list.Select(symbol => symbol.Item1));
@@ -38,11 +38,11 @@ namespace ProseTutorial
                     int index = symbol_list.IndexOf(input[i]);
                     Tuple<int, int> local_range = range_list[index].Item2;
 
-                    int start = local_range.Item1; // Math.Max(i + local_range.Item1, 0);
-                    int end = local_range.Item2; // Math.Min(i + local_range.Item2, input.Count);
+                    int start = Math.Max(i + local_range.Item1, 0);
+                    int end = Math.Min(i + local_range.Item2, input.Count);
 
                     List<string> sublist = input.GetRange(start, end);
-                    string substring = String.Join(" ", sublist);
+                    string substring = String.Join("", sublist);
                     substrings.Add(new Tuple<string, string>(input[i], substring));
                 }
             }
@@ -56,7 +56,9 @@ namespace ProseTutorial
             List<Tuple<string, int[], bool[]>> mappings
         ) {
 
-            string delim = @"[(){}\[\]\s]";
+            // delimiters, matches all non-words and numbers
+            string delim = @"([^\w\\])|(_)";
+
             List<string> replacements = new List<string>();
 
             for (int i = 0; i < tokens.Count; i++) {
@@ -76,7 +78,7 @@ namespace ProseTutorial
                         template[j] = input[placeholder_index[j]];
                     }
                 }
-                replacements.Add(String.Join(" ", template));
+                replacements.Add(String.Join("", template));
             }
 
             return replacements;

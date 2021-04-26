@@ -19,8 +19,8 @@ namespace ProseTutorial
         private (string[], string[], bool[], bool[], bool[], int[]) 
         computePartialMapping(string input, string output) {
             
-            // delimiters, matches (), {}, [], and whitespace
-            string delim = @"[(){}\[\]\s]";
+            // delimiters, matches all non-words and numbers
+            string delim = @"([^\w\\])|(_)";
 
             // separate input into symbols, keeping delimiters
             string[] token = Regex.Split(input, delim);
@@ -37,7 +37,7 @@ namespace ProseTutorial
             for (int i = 0; i < replacement.Length; i++) {
 
                 // skip brackets
-                if (Regex.IsMatch(replacement[i], delim)) {
+                if (Regex.IsMatch(replacement[i], delim) || string.IsNullOrWhiteSpace(replacement[i])) {
                     is_replacement_delim[i] = true;
                     continue;
                 }
@@ -129,8 +129,8 @@ namespace ProseTutorial
                         for (int j = 0; j < is_token_matched.Length; j++) {
                             if (!is_token_matched[j]) {
                                 string symbol = token[j];
-                                int range_start = j - 1;
-                                int range_end = j + 2;
+                                int range_start = -1;
+                                int range_end = +2;
                                 is_token_matched[j] = true;
 
                                 Tuple<int, int> range = new Tuple<int, int>(range_start, range_end);
