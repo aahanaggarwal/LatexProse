@@ -78,9 +78,6 @@ namespace ProseTutorial
                 var input = inputState[rule.Body[0]] as string;
                 var output = example.Value as string;
 
-                // List<Tuple<string, string>> outputState = new List<Tuple<string, string>>();
-                // outputState.Add(new Tuple<string, string>(input, output));
-
                 result[inputState] = output;
             }
             return new ExampleSpec(result);
@@ -113,8 +110,6 @@ namespace ProseTutorial
                 State inputState = example.Key;
                 var input = inputState[rule.Body[0]] as string;
                 var output = example.Value as string;
-                // var ioExample = example.Value;
-                // string output = (ioExample[0] as Tuple<string, string>).Item2;
 
                 (
                     string[] token, 
