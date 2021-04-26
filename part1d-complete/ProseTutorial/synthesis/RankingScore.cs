@@ -24,9 +24,9 @@ namespace ProseTutorial
         }
 
         [FeatureCalculator(nameof(Semantics.Split))]
-        public static double RankingSplit(double v, double range)
+        public static double RankingSplit(double v, double range_list)
         {
-            return range;
+            return range_list;
         }
 
         [FeatureCalculator(nameof(Semantics.Map))]
@@ -35,8 +35,8 @@ namespace ProseTutorial
             return 0;
         }
 
-        [FeatureCalculator("range", Method = CalculationMethod.FromLiteral)]
-        public static double RankingRange(List<Tuple<string, Tuple<int, int>>> range)
+        [FeatureCalculator("range_list", Method = CalculationMethod.FromLiteral)]
+        public static double RankingRange(List<Tuple<string, Tuple<int, int>>> range_list)
         {
             return 0;
         }

@@ -38,8 +38,8 @@ namespace ProseTutorial
                     int index = symbol_list.IndexOf(input[i]);
                     Tuple<int, int> local_range = range_list[index].Item2;
 
-                    int start = Math.Max(i + local_range.Item1, 0);
-                    int end = Math.Min(i + local_range.Item2, input.Count);
+                    int start = local_range.Item1; // Math.Max(i + local_range.Item1, 0);
+                    int end = local_range.Item2; // Math.Min(i + local_range.Item2, input.Count);
 
                     List<string> sublist = input.GetRange(start, end);
                     string substring = String.Join("", sublist);

@@ -78,6 +78,9 @@ namespace ProseTutorial
                 var input = inputState[rule.Body[0]] as string;
                 var output = example.Value as string;
 
+                // List<Tuple<string, string>> outputState = new List<Tuple<string, string>>();
+                // outputState.Add(new Tuple<string, string>(input, output));
+
                 result[inputState] = output;
             }
             return new ExampleSpec(result);
@@ -110,6 +113,8 @@ namespace ProseTutorial
                 State inputState = example.Key;
                 var input = inputState[rule.Body[0]] as string;
                 var output = example.Value as string;
+                // var ioExample = example.Value;
+                // string output = (ioExample[0] as Tuple<string, string>).Item2;
 
                 (
                     string[] token, 
@@ -123,14 +128,14 @@ namespace ProseTutorial
                 List<Tuple<string, Tuple<int, int>>> range_list = new List<Tuple<string, Tuple<int, int>>>();
 
                 // TODO: identify all unmatched symbols, like in Substring
-                // Right now, match all unmatched `replacement` with the nearest unmatched `token`
+                // Right now, match all unmatched `replacement` with the nearest matched `token`
                 for (int i = 0; i < is_replacement_matched.Length; i++) {
                     if (!is_replacement_delim[i] && !is_replacement_matched[i]) {
                         for (int j = 0; j < is_token_matched.Length; j++) {
                             if (!is_token_matched[j]) {
                                 string symbol = token[j];
-                                int range_start = -j;
-                                int range_end = replacement.Length - j;
+                                int range_start = j - 1;
+                                int range_end = j + 2;
                                 is_token_matched[j] = true;
 
                                 Tuple<int, int> range = new Tuple<int, int>(range_start, range_end);
@@ -150,6 +155,21 @@ namespace ProseTutorial
         
         /* Map */
 
+        [WitnessFunction(nameof(Semantics.Map), 0)]
+        public ExampleSpec WitnessMapTokens(GrammarRule rule, ExampleSpec spec)
+        {
+            var result = new Dictionary<State, object>();
+            foreach (KeyValuePair<State, object> example in spec.Examples)
+            {
+                State inputState = example.Key;
+                var output = example.Value as string;
+
+                result[inputState] = output;
+            }
+            return new ExampleSpec(result);
+        }
+
+
         [WitnessFunction(nameof(Semantics.Map), 1)]
         public ExampleSpec WitnessMapTemplates(GrammarRule rule, ExampleSpec spec)
         {
@@ -157,7 +177,7 @@ namespace ProseTutorial
             foreach (KeyValuePair<State, object> example in spec.Examples)
             {
                 State inputState = example.Key;
-                var input = inputState[rule.Body[0]] as string;
+                var input = inputState[rule.Grammar.InputSymbol] as string;
                 var output = example.Value as string;
 
                 (
@@ -172,7 +192,7 @@ namespace ProseTutorial
                 List<Tuple<string, string[]>> templates = new List<Tuple<string, string[]>>();
 
                 // TODO: identify all unmatched symbols, like in Substring
-                // Right now, match all unmatched `replacement` with the nearest unmatched `token`
+                // Right now, match all unmatched `replacement` with the nearest matched `token`
                 for (int i = 0; i < is_replacement_matched.Length; i++) {
                     if (!is_replacement_delim[i] && !is_replacement_matched[i]) {
                         for (int j = 0; j < is_token_matched.Length; j++) {
@@ -199,7 +219,7 @@ namespace ProseTutorial
             foreach (KeyValuePair<State, object> example in spec.Examples)
             {
                 State inputState = example.Key;
-                var input = inputState[rule.Body[0]] as string;
+                var input = inputState[rule.Grammar.InputSymbol] as string;
                 var output = example.Value as string;
 
                 (
