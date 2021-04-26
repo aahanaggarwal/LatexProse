@@ -42,7 +42,7 @@ namespace ProseTutorial
                     int end = local_range.Item2; // Math.Min(i + local_range.Item2, input.Count);
 
                     List<string> sublist = input.GetRange(start, end);
-                    string substring = String.Join("", sublist);
+                    string substring = String.Join(" ", sublist);
                     substrings.Add(new Tuple<string, string>(input[i], substring));
                 }
             }
@@ -76,7 +76,7 @@ namespace ProseTutorial
                         template[j] = input[placeholder_index[j]];
                     }
                 }
-                replacements.Add(String.Join("", template));
+                replacements.Add(String.Join(" ", template));
             }
 
             return replacements;
