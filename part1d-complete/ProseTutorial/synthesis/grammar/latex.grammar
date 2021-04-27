@@ -1,13 +1,19 @@
-﻿using semantics ProseTutorial.Semantics;
-using learners ProseTutorial.WitnessFunctions;
+﻿using System;
 using System.Collections.Generic;
+using semantics ProseTutorial.Semantics;
+using learners ProseTutorial.WitnessFunctions;
 
-language LaTeX;
+language LaTeXGen;
 
 @complete feature double Score = ProseTutorial.RankingScore;
 
+@start string program := Replace(v, tokens, replacements);
+List<Tuple<string, string>> tokens := Split(v, range_list);
+List<string> replacements := Map(tokens, templates, mappings);
+
 @input string v;
+List<Tuple<string, Tuple<int, int>>> range_list;
+List<Tuple<string, string[]>> templates;
+List<Tuple<string, int[], bool[]>> mappings;
 
-@start string program := Replace(v, symbols, symbols);
 
-List<string> symbols;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.AST;
 using Microsoft.ProgramSynthesis.Features;
@@ -17,22 +18,38 @@ namespace ProseTutorial
         }
 
         [FeatureCalculator(nameof(Semantics.Replace))]
-        public static double Substring(double v, double start, double end)
+        public static double RankingReplace(double v, double tokens, double replacements)
         {
-            // return start * end;
             return 0;
         }
 
-        // [FeatureCalculator(nameof(Semantics.AbsPos))]
-        // public static double AbsPos(double v, double k)
-        // {
-        //     return k;
-        // }
-
-        [FeatureCalculator("symbols", Method = CalculationMethod.FromLiteral)]
-        public static double K(List<string> symbols)
+        [FeatureCalculator(nameof(Semantics.Split))]
+        public static double RankingSplit(double v, double range_list)
         {
-            // return 1.0 / symbol.Length;
+            return range_list;
+        }
+
+        [FeatureCalculator(nameof(Semantics.Map))]
+        public static double RankingMap(double tokens, double templates, double mappings)
+        {
+            return 0;
+        }
+
+        [FeatureCalculator("range_list", Method = CalculationMethod.FromLiteral)]
+        public static double RankingRange(List<Tuple<string, Tuple<int, int>>> range_list)
+        {
+            return 0;
+        }
+
+        [FeatureCalculator("templates", Method = CalculationMethod.FromLiteral)]
+        public static double RankingTemplates(List<Tuple<string, string[]>> templates)
+        {
+            return 0;
+        }
+
+        [FeatureCalculator("mappings", Method = CalculationMethod.FromLiteral)]
+        public static double RankingMappings(List<Tuple<string, int[], bool[]>> mappings)
+        {
             return 0;
         }
     }
