@@ -9,7 +9,7 @@ namespace ProseTutorial
     {
         public static string Replace(string v, List<Tuple<string, string>> tokens, List<string> replacements)
         {
-            string modified = v;
+            string modified = Regex.Replace(v, @"\s+", " ");
 
             for (int i = 0; i < tokens.Count; i++) {
                 modified = modified.Replace(tokens[i].Item2, replacements[i]);
@@ -21,13 +21,16 @@ namespace ProseTutorial
         public static List<Tuple<string, string>> Split(string v, List<Tuple<string, Tuple<int, int>>> range_list)
         {
             // delimiters, matches all non-words and numbers
-            string delim = @"([^\w\\])|(_)";
+            string delim = @"([^\w\s\^\\]+)|([_^])|(\s+)";
 
             // list of symbols to replace
             List<string> symbol_list = new List<string>(range_list.Select(symbol => symbol.Item1));
 
-            // separate input into symbols, keeping delimiters
-            List<string> input = new List<string>(Regex.Split(v, delim));
+            // separate input into symbols, keeping delimiters but removing whitespace
+            string[] token = Regex.Split(v, delim);
+            token = token.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
+
+            List<string> input = new List<string>(token);
 
             // this method's return value
             List<Tuple<string, string>> substrings = new List<Tuple<string, string>>();
@@ -42,8 +45,10 @@ namespace ProseTutorial
                     int count = Math.Min(local_range.Item2, input.Count);
 
                     List<string> sublist = input.GetRange(start, count);
-                    string substring = String.Join("", sublist);
-                    substrings.Add(new Tuple<string, string>(input[i], substring));
+                    string substring_ws = String.Join(" ", sublist);
+                    string substring_no_ws = String.Join("", sublist);
+                    substrings.Add(new Tuple<string, string>(input[i], substring_ws));
+                    substrings.Add(new Tuple<string, string>(input[i], substring_no_ws));
                 }
             }
 
@@ -57,7 +62,7 @@ namespace ProseTutorial
         ) {
 
             // delimiters, matches all non-words and numbers
-            string delim = @"([^\w\\])|(_)";
+            string delim = @"([^\w\s\^\\]+)|([_^])|(\s+)";
 
             List<string> replacements = new List<string>();
 
@@ -70,12 +75,16 @@ namespace ProseTutorial
                 int[] placeholder_index = mappings[template_index].Item2;
                 bool[] is_matched_out = mappings[template_index].Item3;
 
-                List<string> input = new List<string>(Regex.Split(token, delim));
+                string[] token_ws = Regex.Split(token, delim);
+                string[] token_no_ws = token_ws.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
+                List<string> input = new List<string>(token_no_ws);
 
                 // map user input to correct position
                 for (int j = 0; j < template.Length; j++) {
                     if (is_matched_out[j]) {
-                        template[j] = input[placeholder_index[j]];
+                        if (placeholder_index[j] < input.Count) {
+                            template[j] = input[placeholder_index[j]];
+                        }
                     }
                 }
                 replacements.Add(String.Join("", template));

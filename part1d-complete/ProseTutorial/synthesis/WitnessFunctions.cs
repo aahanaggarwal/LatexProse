@@ -16,18 +16,22 @@ namespace ProseTutorial
         }
 
         // map all placeholders to the correct symbol index in the token
-        private (string[], string[], bool[], bool[], bool[], int[]) 
+        private (string[], string[], bool[], bool[], bool[], bool[], int[]) 
         computePartialMapping(string input, string output) {
             
             // delimiters, matches all non-words and numbers
-            string delim = @"([^\w\\])|(_)";
+            string delim = @"([^\w\s\^\\]+)|([_^])|(\s+)";
 
             // separate input into symbols, keeping delimiters
             string[] token = Regex.Split(input, delim);
             string[] replacement = Regex.Split(output, delim);
 
+            // remove whitespace from input
+            token = token.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
+
             // declare and initialize arrays to false
             bool[] is_token_matched = Enumerable.Repeat(false, token.Length).ToArray();
+            bool[] is_token_delim = Enumerable.Repeat(false, token.Length).ToArray();
             bool[] is_replacement_matched = Enumerable.Repeat(false, replacement.Length).ToArray();
             bool[] is_replacement_delim = Enumerable.Repeat(false, replacement.Length).ToArray();
 
@@ -36,7 +40,7 @@ namespace ProseTutorial
             // compute index change at every symbol in replacement
             for (int i = 0; i < replacement.Length; i++) {
 
-                // skip brackets
+                // skip delim
                 if (Regex.IsMatch(replacement[i], delim) || string.IsNullOrWhiteSpace(replacement[i])) {
                     is_replacement_delim[i] = true;
                     continue;
@@ -46,6 +50,13 @@ namespace ProseTutorial
                 // send in all possible choices and let PROSE take care of choosing the correct one
 
                 for (int j = 0; j < token.Length; j++) {
+                    // do not count delim in token, because it can be part of symbol
+                    if (string.IsNullOrWhiteSpace(token[j])) {
+                        is_token_delim[j] = true;
+                        continue;
+                    }
+
+                    // assign mapping if token and replacement match
                     if (!is_token_matched[j] && replacement[i].Equals(token[j])) {
                         placeholder_index[i] = j;
                         is_token_matched[j] = true;
@@ -59,10 +70,32 @@ namespace ProseTutorial
                 token, 
                 replacement, 
                 is_token_matched, 
+                is_token_delim,
                 is_replacement_matched, 
                 is_replacement_delim, 
                 placeholder_index
             );
+        }
+
+
+        // find first index before operator which is not a delimiter
+        private int find_range_start(int index, string[] token, bool[] is_token_delim) {
+            for (int i = index - 1; i >= 0; i--) {
+                if (!is_token_delim[i]) {
+                    return i - index;
+                }
+            }
+            return -index;
+        }
+
+        // find count from first input to first index after operator which is not a delimiter
+        private int find_range_count(int op_index, int range_start, string[] token, bool[] is_token_delim) {
+            for (int i = op_index; i < token.Length; i++) {
+                if (!is_token_delim[i] && i > op_index) {
+                    return i - (op_index + range_start) + 1;
+                }
+            }
+            return token.Length - (op_index + range_start);
         }
 
 
@@ -115,6 +148,7 @@ namespace ProseTutorial
                     string[] token, 
                     string[] replacement, 
                     bool[] is_token_matched, 
+                    bool[] is_token_delim, 
                     bool[] is_replacement_matched, 
                     bool[] is_replacement_delim, 
                     int[] placeholder_index
@@ -127,10 +161,10 @@ namespace ProseTutorial
                 for (int i = 0; i < is_replacement_matched.Length; i++) {
                     if (!is_replacement_delim[i] && !is_replacement_matched[i]) {
                         for (int j = 0; j < is_token_matched.Length; j++) {
-                            if (!is_token_matched[j]) {
+                            if (!is_token_matched[j] && !is_token_delim[j]) {
                                 string symbol = token[j];
-                                int range_start = -1;
-                                int range_count = 3;
+                                int range_start = find_range_start(j, token, is_token_delim);
+                                int range_count = find_range_count(j, range_start, token, is_token_delim);
                                 is_token_matched[j] = true;
 
                                 Tuple<int, int> range = new Tuple<int, int>(range_start, range_count);
@@ -179,6 +213,7 @@ namespace ProseTutorial
                     string[] token, 
                     string[] replacement, 
                     bool[] is_token_matched, 
+                    bool[] is_token_delim, 
                     bool[] is_replacement_matched, 
                     bool[] is_replacement_delim, 
                     int[] placeholder_index
@@ -191,7 +226,7 @@ namespace ProseTutorial
                 for (int i = 0; i < is_replacement_matched.Length; i++) {
                     if (!is_replacement_delim[i] && !is_replacement_matched[i]) {
                         for (int j = 0; j < is_token_matched.Length; j++) {
-                            if (!is_token_matched[j]) {
+                            if (!is_token_matched[j] && !is_token_delim[j]) {
                                 string symbol = token[j];
                                 is_token_matched[j] = true;
                                 templates.Add(new Tuple<string, string[]>(symbol, replacement));
@@ -221,6 +256,7 @@ namespace ProseTutorial
                     string[] token, 
                     string[] replacement, 
                     bool[] is_token_matched, 
+                    bool[] is_token_delim,
                     bool[] is_replacement_matched, 
                     bool[] is_replacement_delim, 
                     int[] placeholder_index
@@ -233,7 +269,7 @@ namespace ProseTutorial
                 for (int i = 0; i < is_replacement_matched.Length; i++) {
                     if (!is_replacement_delim[i] && !is_replacement_matched[i]) {
                         for (int j = 0; j < is_token_matched.Length; j++) {
-                            if (!is_token_matched[j]) {
+                            if (!is_token_matched[j] && !is_token_delim[j]) {
                                 string symbol = token[j];
                                 placeholder_index[i] = j;
                                 is_token_matched[j] = true;
