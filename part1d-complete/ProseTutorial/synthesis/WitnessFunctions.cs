@@ -135,9 +135,9 @@ namespace ProseTutorial
         /* Split */
 
         [WitnessFunction(nameof(Semantics.Split), 1)]
-        public ExampleSpec WitnessSplitRange(GrammarRule rule, ExampleSpec spec)
+        public DisjunctiveExamplesSpec WitnessSplitRange(GrammarRule rule, ExampleSpec spec)
         {
-            var result = new Dictionary<State, object>();
+            var result = new Dictionary<State, IEnumerable<object>>();
             foreach (KeyValuePair<State, object> example in spec.Examples)
             {
                 State inputState = example.Key;
@@ -154,30 +154,50 @@ namespace ProseTutorial
                     int[] placeholder_index
                 ) = computePartialMapping(input, output);
 
-                List<Tuple<string, Tuple<int, int>>> range_list = new List<Tuple<string, Tuple<int, int>>>();
+                var occurrences = new List<List<Tuple<string, Tuple<int, int>>>>();
 
-                // TODO: identify all unmatched symbols, like in Substring
-                // Right now, match all unmatched `replacement` with the nearest matched `token`
-                for (int i = 0; i < is_replacement_matched.Length; i++) {
-                    if (!is_replacement_delim[i] && !is_replacement_matched[i]) {
-                        for (int j = 0; j < is_token_matched.Length; j++) {
-                            if (!is_token_matched[j] && !is_token_delim[j]) {
-                                string symbol = token[j];
-                                int range_start = find_range_start(j, token, is_token_delim);
-                                int range_count = find_range_count(j, range_start, token, is_token_delim);
-                                is_token_matched[j] = true;
+                // find all combinations of matched tokens
+                List<Tuple<int, int>> matched_combinations = new List<Tuple<int, int>>();
 
-                                Tuple<int, int> range = new Tuple<int, int>(range_start, range_count);
-                                range_list.Add(new Tuple<string, Tuple<int, int>>(symbol, range));
-                                break;
+                for (int i = 0; i < is_token_matched.Length; i++) {
+                    if (is_token_matched[i] && !is_token_delim[i]) {
+                        matched_combinations.Add(new Tuple<int, int>(i, 1));
+
+                        for (int j = i + 1; j < is_token_matched.Length; j++) {
+                            if (is_token_matched[j] && !is_token_delim[j]) {
+                                matched_combinations.Add(new Tuple<int, int>(i, j - i + 1));
                             }
                         }
                     }
                 }
 
-                result[inputState] = range_list;
+                // add all possibilities of range
+                for (int k = 0; k < matched_combinations.Count; k++) {
+                    List<Tuple<string, Tuple<int, int>>> range_list = new List<Tuple<string, Tuple<int, int>>>();
+
+                    for (int i = 0; i < is_replacement_matched.Length; i++) {
+                        if (!is_replacement_delim[i] && !is_replacement_matched[i]) {
+                            for (int j = 0; j < is_token_matched.Length; j++) {
+                                if (!is_token_matched[j] && !is_token_delim[j]) {
+                                    string symbol = token[j];
+
+                                    int start_index = matched_combinations[k].Item1;
+                                    int range_start = start_index - j;
+                                    int range_count = matched_combinations[k].Item2;
+
+                                    Tuple<int, int> range = new Tuple<int, int>(range_start, range_count);
+                                    range_list.Add(new Tuple<string, Tuple<int, int>>(symbol, range));
+                                }
+                            }
+                        }
+                    }
+                    occurrences.Add(range_list);
+                }
+
+                if (occurrences.Count == 0) return null;
+                result[inputState] = occurrences;
             }
-            return new ExampleSpec(result);
+            return new DisjunctiveExamplesSpec(result);
         }
 
 
